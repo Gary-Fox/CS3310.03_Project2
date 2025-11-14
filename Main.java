@@ -7,13 +7,14 @@ public class Main
 
         int numVertices = 5;
         int maxWeight = 10;
+        //KEEP DENSITY BETWEEN 0.0 AND 1.0, excluive.
         double density = 0.5;
 
         GraphDW graph = new GraphDW(numVertices);
         graph = GraphDW.randGraphDW(numVertices, maxWeight, density);
 
         //GraphDW graph2 = new GraphDW();
-        GraphDW graph2 = GraphDW.randGraphDW(10, 50, 1.0);
+        GraphDW graph2 = GraphDW.randGraphDW(10, 50, 0.9);
 
         printGraphDW(graph);
         printGraphDW(GraphDW.randGraphDW(10, 50, 0.1));
@@ -52,6 +53,14 @@ class FlyodWarshall
                 }
             }
             System.out.println();
+
         }
+        printBreak();
+    }
+
+    public static void printBreak()
+    {
+        System.out.print("##################################################");
+        System.out.println("");
     }
 }
