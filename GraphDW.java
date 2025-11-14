@@ -78,23 +78,38 @@ public class GraphDW
                 }
             }
         }
+        if (graph.isConnected() == false) {
+            System.out.println("Generated graph is notconnected!");
+        }
 
         return graph;
     }
 
-    // public boolean isConnected() 
-    // {
-    //     // A directed graph is strongly connected if there is a path from any vertex to every other vertex.
-    //     for (int i = 0; i < numVertices; i++) 
-    //     {
-    //         boolean[] visited = new boolean[numVertices];
-    //         dfs(i, visited);
-    //         for (boolean v : visited) 
-    //         {
-    //             if (!v) return false;
-    //         }
-    //     }
-    //     return true;
-    // }
+    public boolean isConnected() 
+    {
+        // A directed graph is strongly connected if there is a path from any vertex to every other vertex.
+        for (int i = 0; i < numVertices; i++) 
+        {
+            boolean[] visited = new boolean[numVertices];
+            dfs(i, visited);
+            for (boolean v : visited) 
+            {
+                if (!v) return false;
+            }
+        }
+        return true;
+    }
+
+    public void dfs(int v, boolean[] visited) 
+    {
+        visited[v] = true;
+        for (int i = 0; i < numVertices; i++) 
+        {
+            if (adjMatrix[v][i] != Integer.MAX_VALUE && !visited[i]) 
+            {
+                dfs(i, visited);
+            }
+        }
+    }
     
 }
