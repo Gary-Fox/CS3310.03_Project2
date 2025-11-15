@@ -1,54 +1,113 @@
+import java.util.Arrays;
 
-
-public class Main
-{
-    public static void main(String[] args)
-    {
-
+public class Main {
+    public static void main(String[] args) {
         int numVertices = 5;
         int maxWeight = 10;
-        //KEEP DENSITY BETWEEN 0.0 AND 1.0, excluive.
+        // KEEP DENSITY BETWEEN 0.0 AND 1.0, excluive.
         double density = 0.5;
 
         GraphDW graph = new GraphDW(numVertices);
         graph = GraphDW.randGraphDW(numVertices, maxWeight, density);
 
-        //GraphDW graph2 = new GraphDW();
         GraphDW graph2 = GraphDW.randGraphDW(10, 50, 0.9);
 
-        printGraphDW(graph);
+        printBreak();
         printGraphDW(GraphDW.randGraphDW(10, 50, 0.1));
         printGraphDW(graph2);
+        printGraphDW(graph);
+
+        // Running Dijkstra starting from vertex 0
+        int source = 0;
+        Dijkstra.run(graph, source);
+        printBreak();
     }
 
+    public class Dijkstra {
+        // using Integer.MAX_VALUE for "no edge"
+        public static int[] run(GraphDW g, int src) {
+            int n = g.numVertices;
+            int[][] w = g.adjMatrix;
 
-class Dijkstra
-{
-    // Implementation of Dijkstra's algorithm will go here
-} 
+            int[] dist = new int[n];
+            int[] parent = new int[n];
+            boolean[] used = new boolean[n];
 
-class FlyodWarshall
-{
-    // Implementation of Floyd-Warshall algorithm will go here
-}
+            Arrays.fill(dist, Integer.MAX_VALUE);
+            Arrays.fill(parent, -1);
+            dist[src] = 0;
 
+            for (int it = 0; it < n; it++) {
+                // Used to pick unused vertex with the smalest distance
+                int u = -1, best = Integer.MAX_VALUE;
+                for (int v = 0; v < n; v++) {
+                    if (!used[v] && dist[v] < best) {
+                        best = dist[v];
+                        u = v;
+                    }
+                }
+                if (u == -1)
+                    break;
+                used[u] = true;
 
-    public static void printGraphDW(GraphDW graph)
-    {
+                for (int v = 0; v < n; v++) {
+                    int wt = w[u][v];
+                    if (wt == Integer.MAX_VALUE)
+                        continue; // no edg
+                    if (dist[u] == Integer.MAX_VALUE)
+                        continue;
+                    int nd = dist[u] + wt;
+                    if (nd < dist[v]) {
+                        dist[v] = nd;
+                        parent[v] = u;
+                    }
+                }
+            }
+
+            System.out.println("Dijkstra from " + src + ":");
+            for (int v = 0; v < n; v++) {
+                System.out.print("to " + v + " = ");
+                if (dist[v] == Integer.MAX_VALUE) {
+                    System.out.print("inf");
+                } else {
+                    System.out.print(dist[v]);
+                }
+                System.out.print(" | path: ");
+                printPath(v, parent);
+                System.out.println();
+            }
+            return dist;
+        }
+
+        private static void printPath(int v, int[] parent) {
+            int[] stack = new int[parent.length + 1];
+            int k = 0, cur = v;
+            while (cur != -1 && k < stack.length) {
+                stack[k++] = cur;
+                cur = parent[cur];
+            }
+            for (int i = k - 1; i >= 0; i--) {
+                System.out.print(stack[i]);
+                if (i > 0)
+                    System.out.print(" -> ");
+            }
+        }
+    }
+
+    class FlyodWarshall {
+        // Implementation of Floyd-Warshall algorithm will go here
+    }
+
+    public static void printGraphDW(GraphDW graph) {
         int numVertices = graph.getNumVertices();
         int[][] adjMatrix = graph.getAdjMatrix();
 
         System.out.println("Adjacency Matrix:");
-        for (int i = 0; i < numVertices; i++) 
-        {
-            for (int j = 0; j < numVertices; j++) 
-            {
-                if (adjMatrix[i][j] == Integer.MAX_VALUE) 
-                {
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                if (adjMatrix[i][j] == Integer.MAX_VALUE) {
                     System.out.print("∞ ");
-                } 
-                else 
-                {
+                } else {
                     System.out.print(adjMatrix[i][j] + " ");
                 }
             }
@@ -58,8 +117,7 @@ class FlyodWarshall
         printBreak();
     }
 
-    public static void printBreak()
-    {
+    public static void printBreak() {
         System.out.print("##################################################");
         System.out.println("");
     }
