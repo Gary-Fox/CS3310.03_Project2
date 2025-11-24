@@ -21,6 +21,17 @@ public class Main {
         int source = 0;
         Dijkstra.run(graph, source);
         printBreak();
+
+        GraphDW graph3 = new GraphDW(numVertices);
+        graph3 = GraphDW.randGraphDW(numVertices, maxWeight, 0.1);
+        printGraphDW(graph3);
+
+        //Running FloydWarshall 
+        int[][] dummy = floydWarshall(graph3.getAdjMatrix());
+        graph3.setAdjMatrix(dummy);
+        printGraphDW(graph3);
+        
+
     }
 
     public class Dijkstra {
@@ -94,9 +105,9 @@ public class Main {
         }
     }
 
-public static double[][] floydWarshall(double[][] dist) {
+public static int[][] floydWarshall(int[][] dist) {
     int n = dist.length;
-    double[][] dp = new double[n][n];
+    int[][] dp = new int[n][n];
 
     // Copy matrix
     for (int i = 0; i < n; i++) {
@@ -116,7 +127,10 @@ public static double[][] floydWarshall(double[][] dist) {
         }
     }
 
+    
+
     return dp;
+    
 }
 
     public static void printGraphDW(GraphDW graph) {
@@ -126,7 +140,7 @@ public static double[][] floydWarshall(double[][] dist) {
         System.out.println("Adjacency Matrix:");
         for (int i = 0; i < numVertices; i++) {
             for (int j = 0; j < numVertices; j++) {
-                if (adjMatrix[i][j] == Integer.MAX_VALUE) {
+                if (adjMatrix[i][j] == Math.abs(Integer.MAX_VALUE)) {
                     System.out.print("∞ ");
                 } else {
                     System.out.print(adjMatrix[i][j] + " ");

@@ -45,6 +45,23 @@ public class GraphDW
         return adjMatrix;
     }
 
+    public void setAdjMatrix(int[][] input)
+    {
+        int n = input.length;
+        int m = input[0].length;
+
+        int[][] newAdjMatrix = new int[n][m];
+        
+        for (int i=0; i<n; i++)
+        {
+            for (int j=0; j<m; j++)
+            {
+                newAdjMatrix[i][j] = input[i][j];
+            }
+        }
+        adjMatrix = newAdjMatrix;
+    }
+
     /** Generates a random, Directed Weighted graph with the given parameters.
      * @param numVertices Number of vertices in the graph
      * @param maxWeight Maximum weight for any edge
