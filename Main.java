@@ -94,9 +94,30 @@ public class Main {
         }
     }
 
-    class FlyodWarshall {
-        // Implementation of Floyd-Warshall algorithm will go here
+public static double[][] floydWarshall(double[][] dist) {
+    int n = dist.length;
+    double[][] dp = new double[n][n];
+
+    // Copy matrix
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            dp[i][j] = dist[i][j];
+        }
     }
+
+    // Floyd–Warshall
+    for (int k = 0; k < n; k++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dp[i][k] + dp[k][j] < dp[i][j]) {
+                    dp[i][j] = dp[i][k] + dp[k][j];
+                }
+            }
+        }
+    }
+
+    return dp;
+}
 
     public static void printGraphDW(GraphDW graph) {
         int numVertices = graph.getNumVertices();
@@ -121,4 +142,5 @@ public class Main {
         System.out.print("##################################################");
         System.out.println("");
     }
+
 }
